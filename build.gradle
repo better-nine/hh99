@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+springBoot {
+    mainClass.set('com.example.LegacyApplication') // 실제 메인 클래스 경로 지정
+}
+
+bootJar {
+    archiveFileName = 'service-legacy.jar'
+}
+
+repositories {
+    mavenCentral() // 기본 레포지토리 추가
+}
+
+dependencies {
+    // JPA + MySQL
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // MySQL Driver
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    // Lombok (선택)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Spring Boot Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Apache Avro
+    implementation 'org.apache.avro:avro:1.11.1'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+test {
+    useJUnitPlatform()
+}
