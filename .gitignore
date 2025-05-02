@@ -42,5 +42,3 @@ volumes/data
 
 .env
 .env.*
-.yml
-*.yml
