@@ -59,13 +59,13 @@ public class StockService {
 
     /**
      * 재고 수량 감소
-     * @param stockId
+     * @param productId
      * @param quantity
      * @return
      */
     @Transactional
-    public Stock decreaseStock(String stockId, Long quantity) {
-        Stock stock = stockRepository.findByStockId(stockId)
+    public Stock decreaseStock(String productId, Long quantity) {
+        Stock stock = stockRepository.findByProductId(productId)
                 .orElseThrow(() -> new IllegalArgumentException("재고가 존재하지 않습니다"));
 
         boolean result = stock.decrease(quantity);
