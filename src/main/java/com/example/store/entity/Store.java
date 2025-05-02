@@ -3,14 +3,16 @@ package com.example.store.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "stores")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Store {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

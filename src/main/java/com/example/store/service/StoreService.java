@@ -23,9 +23,14 @@ public class StoreService {
      * @return
      */
     public Store createStore(StoreDto dto) {
-
-
-        return null;
+        Store store = Store.builder()
+                .storeId(UUID.randomUUID().toString())
+                .storeName(dto.getStoreName())
+                .ownerName(dto.getOwnerName())
+                .address(dto.getAddress())
+                .phoneNumber(dto.getPhoneNumber())
+                .build();
+        return storeRepository.save(store);
     }
 
     /**
@@ -34,10 +39,10 @@ public class StoreService {
      * @return
      */
     public Store getStore(String storeId) {
-
-
-        return null;
+        return storeRepository.findByStoreId(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 가게가 존재하지 않습니다."));
     }
+
 
     /**
      * 가게 수정
@@ -46,9 +51,16 @@ public class StoreService {
      * @return
      * @throws JsonMappingException
      */
-    public Store updateStore(String storeId, StoreDto dto) throws JsonMappingException {
+    public Store updateStore(String storeId, StoreDto dto) {
+        Store store = storeRepository.findByStoreId(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 가게가 존재하지 않습니다."));
 
-        return null;
+        store.setStoreName(dto.getStoreName());
+        store.setOwnerName(dto.getOwnerName());
+        store.setAddress(dto.getAddress());
+        store.setPhoneNumber(dto.getPhoneNumber());
+
+        return storeRepository.save(store);
     }
 
     /**
@@ -56,7 +68,9 @@ public class StoreService {
      * @param storeId
      */
     public void deleteStore(String storeId) {
-
+        Store store = storeRepository.findByStoreId(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 가게가 존재하지 않습니다."));
+        storeRepository.delete(store);
     }
 
 
