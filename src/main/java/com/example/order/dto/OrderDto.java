@@ -1,18 +1,19 @@
 package com.example.order.dto;
 
 import com.example.order.entity.OrderStatus;
+import com.example.orderProduct.entity.OrderProduct;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class OrderDto {
-    private String storeId;
-    private String productId;
-    private String stockId;
-    private Long quantity;
+    private String orderId;
     private OrderStatus status;
     private Timestamp orderDateTime;
+
+    private List<OrderProduct> orderProduct;
 }
