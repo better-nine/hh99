@@ -1,7 +1,7 @@
 package com.example.order.dto;
 
 import com.example.order.entity.OrderStatus;
-import com.example.orderProduct.entity.OrderProduct;
+import com.example.orderProduct.dto.OrderProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,5 +15,5 @@ public class OrderDto {
     private OrderStatus status;
     private Timestamp orderDateTime;
 
-    private List<OrderProduct> orderProduct;
+    private List<OrderProductDto> orderProductDtoList;
 }

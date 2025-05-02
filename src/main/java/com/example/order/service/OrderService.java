@@ -3,6 +3,7 @@ package com.example.order.service;
 import com.example.order.dto.OrderDto;
 import com.example.order.entity.Order;
 import com.example.order.repository.OrderRepository;
+import com.example.orderProduct.entity.OrderProduct;
 import com.example.orderProduct.service.OrderProductService;
 import com.example.stock.service.StockService;
 import jakarta.transaction.Transactional;
@@ -35,15 +36,20 @@ public class OrderService {
                 .status(dto.getStatus())
                 .orderDateTime(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
-        orderRepository.save(order);
 
         // 재고 감소 및 주문 상품 등록
-        dto.getOrderProduct().forEach(orderProductDto -> {
+        dto.getOrderProductDtoList().forEach(orderProductDto -> {
             stockService.decreaseStock(orderProductDto.getProductId(), orderProductDto.getQuantity());
-            orderProductService.createOrderProduct(orderId, orderProductDto);
+
+            OrderProduct orderProduct = new OrderProduct();
+            orderProduct.setOrderProductId(UUID.randomUUID().toString());
+            orderProduct.setOrderId(orderId);
+            orderProduct.setProductId(orderProductDto.getProductId());
+            orderProduct.setQuantity(orderProductDto.getQuantity());
+            orderProductService.createOrderProduct(orderProduct);
         });
 
-        return order;
+        return orderRepository.save(order);
     }
 
 }

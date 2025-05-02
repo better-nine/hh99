@@ -12,9 +12,8 @@ public class OrderProductService {
 
     private final OrderProductRepository orderProductRepository;
 
-    public OrderProduct createOrderProduct(String orderId, OrderProduct dto) {
-        dto.setOrderId(orderId);
-        return orderProductRepository.save(dto);
+    public OrderProduct createOrderProduct(OrderProduct orderProduct) {
+        return orderProductRepository.save(orderProduct);
     }
 
 
