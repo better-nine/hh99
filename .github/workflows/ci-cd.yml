@@ -21,35 +21,29 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 2. Gradle 설치
-      - name: Install Gradle
-        run: |
-          wget https://services.gradle.org/distributions/gradle-7.3.3-bin.zip
-          unzip gradle-7.3.3-bin.zip
-          sudo mv gradle-7.3.3 /opt/gradle
-          sudo ln -s /opt/gradle/bin/gradle /usr/local/bin/gradle
-          gradle -v  # Gradle 설치 확인
-
-      # 3. Gradle Wrapper 동적으로 생성
-      - name: Generate Gradle Wrapper
-        run: gradle wrapper  # Gradle Wrapper 파일을 생성
-
-      # 4. Gradle 빌드 실행 (테스트 제외)
+      # 2. Gradle 설정
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+        
+      - name: Give execute permission to gradlew
+        run: chmod +x ./gradlew
+        
+      # 3. Jar 파일 빌드 (테스트 제외)
       - name: Build with Gradle Wrapper
         run: ./gradlew -x test bootJar
 
-      # 5. Docker Buildx 설정
+      # 4. Docker Buildx 설정
       - name: Set up Docker Build
         uses: docker/setup-buildx-action@v1
 
-      # 6. Docker 로그인
+      # 5. Docker 로그인
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 7. Docker 이미지 빌드 및 푸시
+      # 6. Docker 이미지 빌드 및 푸시
       - name: Build and push Docker image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/rankitrun-be:latest .
@@ -66,8 +60,9 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version  # 설치된 버전 확인
+ 
 
-      # 2. `docker-compose.yml` 파일 생성 (환경 변수 사용)
+      # 2. docker-compose.yml 파일 생성  
       - name: Generate docker-compose.yml dynamically
         run: |
           echo "
