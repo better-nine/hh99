@@ -15,7 +15,6 @@ import java.util.UUID;
 public class StoreService {
 
     private final StoreRepository storeRepository;
-    private final ObjectMapper mapper;
 
     /**
      * 가게 등록
@@ -49,7 +48,6 @@ public class StoreService {
      * @param storeId
      * @param dto
      * @return
-     * @throws JsonMappingException
      */
     public Store updateStore(String storeId, StoreDto dto) {
         Store store = storeRepository.findByStoreId(storeId)
@@ -65,7 +63,6 @@ public class StoreService {
 
     /**
      * 가게 삭제
-     * @param storeId
      */
     public void deleteStore(String storeId) {
         Store store = storeRepository.findByStoreId(storeId)
