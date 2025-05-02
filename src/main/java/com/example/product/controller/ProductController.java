@@ -26,7 +26,7 @@ public class ProductController {
 
     @PutMapping("/{productId}")
     public Product updateProduct(@PathVariable String productId,
-                                 @RequestBody ProductDto dto) throws JsonMappingException {
+                                 @RequestBody ProductDto dto) {
         return productService.updateProduct(productId, dto);
     }
 

@@ -9,18 +9,21 @@ import java.io.Serializable;
 @Table(name = "products")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String productId;
-    private String name;
-    private Long price;
-    private String content;
+    private String productName;
+    private Long productPrice;
+    private String description;
+
+    @Column(nullable = false)
+    private String storeId;
 }

@@ -26,8 +26,10 @@ public class ProductService {
     public Product createProduct(ProductDto dto) {
         Product product = Product.builder()
                 .productId(java.util.UUID.randomUUID().toString())
-                .name(dto.getName())
-                .price(dto.getPrice())
+                .productName(dto.getProductName())
+                .productPrice(dto.getProductPrice())
+                .description(dto.getDescription())
+                .storeId(dto.getStoreId())
                 .build();
         return productRepository.save(product);
     }
@@ -39,7 +41,7 @@ public class ProductService {
      */
     public Product getProduct(String productId) {
         return productRepository.findByProductId(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
     }
 
     /**
@@ -50,12 +52,14 @@ public class ProductService {
      * @throws JsonMappingException
      */
     @Transactional
-    public Product updateProduct(String productId, ProductDto dto) throws JsonMappingException {
+    public Product updateProduct(String productId, ProductDto dto) {
         Product product = productRepository.findByProductId(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
-        product.setName(dto.getName());
-        product.setPrice(dto.getPrice());
+        product.setProductName(dto.getProductName());
+        product.setProductPrice(dto.getProductPrice());
+        product.setDescription(dto.getDescription());
+        product.setStoreId(dto.getStoreId());
 
         return productRepository.save(product);
     }
@@ -66,7 +70,7 @@ public class ProductService {
      */
     public void deleteProduct(String productId) {
         Product product = productRepository.findByProductId(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
         productRepository.delete(product);
     }
