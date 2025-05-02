@@ -4,7 +4,6 @@ import com.example.store.dto.StoreDto;
 import com.example.store.entity.Store;
 import com.example.store.repository.StoreRepository;
 import com.example.store.service.StoreService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
