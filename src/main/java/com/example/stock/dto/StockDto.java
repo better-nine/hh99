@@ -6,7 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class StockDto {
-    private String storeId;
+    private String stockId;
     private String productId;
     private Long stock;
 }
+

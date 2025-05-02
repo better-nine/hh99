@@ -3,8 +3,6 @@ package com.example.stock.service;
 import com.example.stock.dto.StockDto;
 import com.example.stock.entity.Stock;
 import com.example.stock.repository.StockRepository;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,6 @@ public class StockService {
     public Stock createStock(StockDto dto) {
         Stock stock = Stock.builder()
                 .stockId(UUID.randomUUID().toString())
-                .storeId(dto.getStoreId())
                 .productId(dto.getProductId())
                 .stock(dto.getStock())
                 .build();
@@ -41,7 +38,7 @@ public class StockService {
      */
     public Stock getStock(String stockId) {
         return stockRepository.findByStockId(stockId)
-                .orElseThrow(() -> new IllegalArgumentException("Stock not found"));
+                .orElseThrow(() -> new IllegalArgumentException("재고가 존재하지 않습니다"));
     }
 
     /**
@@ -49,13 +46,11 @@ public class StockService {
      * @param stockId
      * @param dto
      * @return
-     * @throws JsonMappingException
      */
-    public Stock updateStock(String stockId, StockDto dto) throws JsonMappingException {
+    public Stock updateStock(String stockId, StockDto dto) {
         Stock stock = stockRepository.findByStockId(stockId)
-                .orElseThrow(() -> new IllegalArgumentException("Stock not found"));
+                .orElseThrow(() -> new IllegalArgumentException("재고가 존재하지 않습니다"));
 
-        stock.setStoreId(dto.getStoreId());
         stock.setProductId(dto.getProductId());
         stock.setStock(dto.getStock());
 
@@ -71,11 +66,11 @@ public class StockService {
     @Transactional
     public Stock decreaseStock(String stockId, Long quantity) {
         Stock stock = stockRepository.findByStockId(stockId)
-                .orElseThrow(() -> new IllegalArgumentException("Stock not found"));
+                .orElseThrow(() -> new IllegalArgumentException("재고가 존재하지 않습니다"));
 
         boolean result = stock.decrease(quantity);
         if (!result) {
-            throw new IllegalStateException("Not enough stock");
+            throw new IllegalStateException("재고가 충분하지 않습니다");
         }
 
         return stockRepository.save(stock);

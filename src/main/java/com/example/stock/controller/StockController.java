@@ -3,7 +3,6 @@ package com.example.stock.controller;
 import com.example.stock.dto.StockDto;
 import com.example.stock.entity.Stock;
 import com.example.stock.service.StockService;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,15 +27,12 @@ public class StockController {
     }
 
     @PutMapping("/{stockId}")
-    public Stock updateStock(@PathVariable String stockId,
-                              @RequestBody StockDto dto) throws JsonMappingException {
+    public Stock updateStock(@PathVariable String stockId, @RequestBody StockDto dto) {
         return stockService.updateStock(stockId, dto);
     }
 
     @PutMapping("/{stockId}/decrease/{quantity}")
-    public Stock decreaseStock(@PathVariable String stockId,
-                                 @PathVariable Long quantity
-                               ) {
+    public Stock decreaseStock(@PathVariable String stockId, @PathVariable Long quantity) {
         return stockService.decreaseStock(stockId, quantity);
     }
 
