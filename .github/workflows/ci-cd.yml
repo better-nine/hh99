@@ -3,7 +3,7 @@ name: develop branch bluegreen deployment
 on:
   push:
     branches:
-      - main 
+      - main  # main 브랜치에 푸시될 때 실행
 
 jobs:
   build:
@@ -54,12 +54,19 @@ jobs:
     needs: build  # build 작업이 완료되어야 실행
 
     steps:
-      # 1. Docker Compose로 MySQL, Kafka, Zookeeper 실행
+      # 1. Docker Compose 설치
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version  # 설치된 버전 확인
+
+      # 2. Docker Compose로 MySQL, Kafka, Zookeeper 실행
       - name: Start MySQL, Kafka, and Zookeeper for testing
         run: |
           docker-compose -f docker-compose.yml up -d
 
-      # 2. MySQL이 준비될 때까지 기다림
+      # 3. MySQL이 준비될 때까지 기다림
       - name: Wait for MySQL to be ready
         run: |
           echo "Waiting for MySQL..."
@@ -68,7 +75,7 @@ jobs:
             sleep 2
           done
 
-      # 3. Kafka가 준비될 때까지 기다림
+      # 4. Kafka가 준비될 때까지 기다림
       - name: Wait for Kafka to be ready
         run: |
           echo "Waiting for Kafka..."
@@ -77,10 +84,10 @@ jobs:
             sleep 2
           done
 
-      # 4. 애플리케이션 테스트 실행
+      # 5. 애플리케이션 테스트 실행
       - name: Run tests
         run: ./gradlew test  # Gradle을 사용한 테스트 실행
 
-      # 5. MySQL, Kafka, Zookeeper 종료
+      # 6. MySQL, Kafka, Zookeeper 종료
       - name: Stop MySQL, Kafka, and Zookeeper
         run: docker-compose down
