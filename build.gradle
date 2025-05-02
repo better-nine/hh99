@@ -20,9 +20,15 @@ dependencies {
     // JPA + MySQL
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+
     // MySQL Driver
     runtimeOnly 'com.mysql:mysql-connector-j'
-    // Lombok (선택)
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
@@ -32,9 +38,17 @@ dependencies {
     // Apache Avro
     implementation 'org.apache.avro:avro:1.11.1'
 
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.kafka:kafka-clients:3.7.1'  // Kafka 클라이언트
+
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'  // JUnit 5 의존성
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'  // JUnit 5 엔진 의존성
 }
 
 test {
