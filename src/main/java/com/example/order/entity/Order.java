@@ -5,11 +5,9 @@ import jakarta.persistence.*;
 
         import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "order")
 @Getter
 @Setter
 @Builder
@@ -23,10 +21,6 @@ public class Order implements Serializable {
 
     @Column(unique = true, nullable = false)
     private String orderId;
-    private String storeId;
-    private String productId;
-    private String stockId;
-    private Long quantity;
     private OrderStatus status;
     private Timestamp orderDateTime;
 }

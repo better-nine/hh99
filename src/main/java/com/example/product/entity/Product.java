@@ -6,7 +6,7 @@ import lombok.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 @Getter
 @Setter
 @Builder
