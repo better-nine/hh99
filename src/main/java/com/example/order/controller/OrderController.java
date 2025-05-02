@@ -21,19 +21,20 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     public Order getOrder(@PathVariable String orderId) {
-        return orderService.getOrder(orderId);
+        return null;
+        //return orderService.getOrder(orderId);
     }
 
     @PutMapping("/{orderId}")
     public Order updateOrder(@PathVariable String orderId,
                               @RequestBody OrderDto dto) throws JsonMappingException {
-
-        return orderService.updateOrder(orderId, dto);
+        return null;
+        //return orderService.updateOrder(orderId, dto);
     }
 
     @DeleteMapping("/{orderId}")
     public boolean deleteOrder(@PathVariable String orderId) {
-        orderService.deleteOrder(orderId);
+        //orderService.deleteOrder(orderId);
 
         return true;
     }
