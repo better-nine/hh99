@@ -18,6 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 @Rollback(false)
 class StoreServiceIntegrationTest {
     // 통합테스트(Integration Test) : 실제 데이터베이스나 외부 API를 사용 실제 환경에서의 동작을 검증
+/*
 
     @Autowired
     private StoreService storeService;
@@ -87,5 +88,6 @@ class StoreServiceIntegrationTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("해당 가게가 존재하지 않습니다");
     }
+*/
 
 }

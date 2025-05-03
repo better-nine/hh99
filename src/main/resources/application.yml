@@ -6,7 +6,7 @@ spring:
     name: store-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/testdb?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/testdb #?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: testuser  #root
     password: testpass  #1234
     driver-class-name: com.mysql.cj.jdbc.Driver
