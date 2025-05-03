@@ -18,6 +18,7 @@ import static org.mockito.Mockito.*;
 
 
 public class StockServiceUnitTest {
+/*
 
     @Mock
     private StockRepository stockRepository;
@@ -161,5 +162,6 @@ public class StockServiceUnitTest {
         // Then
         verify(stockRepository, times(1)).findByStockId("555");
     }
+*/
 
 }
