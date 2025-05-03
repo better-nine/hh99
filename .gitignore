@@ -42,5 +42,6 @@ volumes/data
 
 .env
 .env.*
-.yml
-*.yml
+
+
+.DS_Srore
