@@ -1,133 +1,24 @@
-name: develop branch bluegreen deployment
+name: Java CI
 
 on:
   push:
-    branches:
-      - main  # main 브랜치에 푸시될 때 실행
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout source
+        uses: actions/checkout@v3
 
-      # 1. JDK 17 설정
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # 2. Gradle 설정
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-        
-      - name: Give execute permission to gradlew
-        run: chmod +x ./gradlew
-        
-      # 3. Jar 파일 빌드 (테스트 제외)
-      - name: Build with Gradle Wrapper
-        run: ./gradlew -x test bootJar
-
-      # 4. Docker Buildx 설정
-      - name: Set up Docker Build
-        uses: docker/setup-buildx-action@v1
-
-      # 5. Docker 로그인
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # 6. Docker 이미지 빌드 및 푸시
-      - name: Build and push Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/rankitrun-be:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/rankitrun-be:latest
-
-  start_services:
-    runs-on: ubuntu-latest
-    needs: build  # build 작업이 완료되어야 실행
-
-    steps:
-      # 1. Docker Compose 설치
-      - name: Install Docker Compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-          docker-compose --version  # 설치된 버전 확인
- 
-
-      # 2. docker-compose.yml 파일 생성  
-      - name: Generate docker-compose.yml dynamically
-        run: |
-          echo "
-          version: '3'
-          services:
-            mysql:
-              image: mysql:8
-              container_name: mysql
-              environment:
-                MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-                MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-                MYSQL_USER: ${{ secrets.MYSQL_USER }}
-                MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-              ports:
-                - '3306:3306'
-            zookeeper:
-              image: bitnami/zookeeper:latest
-              container_name: zookeeper
-              ports:
-                - '2181:2181'
-            kafka:
-              image: bitnami/kafka:latest
-              container_name: kafka
-              environment:
-                KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093
-                KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
-                KAFKA_LISTENER_NAME_INSIDE: INSIDE
-                KAFKA_LISTENER_PORT: 9093
-                KAFKA_LISTENER_INTERFACE: eth0
-                KAFKA_LISTENERS: INSIDE://localhost:9092
-                KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-              ports:
-                - '9092:9092'
-          networks:
-            my_network:
-              driver: bridge
-          " > docker-compose.yml
-
-      # 3. Docker Compose로 MySQL, Kafka, Zookeeper 실행
-      - name: Start MySQL, Kafka, and Zookeeper for testing
-        run: |
-          docker-compose -f docker-compose.yml up -d
-
-      # 4. MySQL이 준비될 때까지 기다림
-      - name: Wait for MySQL to be ready
-        run: |
-          echo "Waiting for MySQL..."
-          for i in {1..30}; do
-            docker exec mysql mysqladmin ping -h "localhost" --silent && echo "MySQL OK" && break
-            sleep 2
-          done
-
-      # 5. Kafka가 준비될 때까지 기다림
-      - name: Wait for Kafka to be ready
-        run: |
-          echo "Waiting for Kafka..."
-          for i in {1..30}; do
-            docker exec kafka kafka-topics --bootstrap-server localhost:9092 --list && echo "Kafka OK" && break
-            sleep 2
-          done
-
-      # 6. 애플리케이션 테스트 실행
-      - name: Run tests
-        run: ./gradlew test  # Gradle을 사용한 테스트 실행
-
-      # 7. MySQL, Kafka, Zookeeper 종료
-      - name: Stop MySQL, Kafka, and Zookeeper
-        run: docker-compose down
+      - name: Build with Gradle
+        run: ./gradlew build
